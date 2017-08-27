@@ -37,7 +37,7 @@ def freeze_graph(model_folder):
 
     # NOTE: this variable is plural, because you can have multiple output nodes
 
-    output_node_names = "Softmax_1"
+    output_node_names = "Mean_3" #data_node" #"Softmax_1"
 
 
 
