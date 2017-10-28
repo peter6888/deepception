@@ -2,9 +2,9 @@ CMakeLists.txt
 cmake_build/*
 Debug/*
 frozen_model_rpn.pb
-simpe_detection.sdf
+simple_detection.sdf
 simple_dection.VC.db
 x64/*
 simple_detection/x64/*
-simpe_detection.VC.VC.opendb
-simpe_detection.VC.db
+simple_detection.VC.VC.opendb
+simple_detection.VC.db
