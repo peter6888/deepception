@@ -169,57 +169,30 @@ int main(int argc, char** argv)
 	Mat im_gray;
 
 	std::cerr << "argc" << argc;
-	//! [Create the importer of TensorFlow model]
-	Ptr<dnn::Importer> importer_arrow;
-	try                                     //Try to import TensorFlow AlexNet model
-	{
-		importer_arrow = dnn::createTensorflowImporter("frozen_model_arrow.pb"); // frozen_model_arrow.pb");
-	}
-	catch (const cv::Exception &err)        //Importer can throw errors, we will catch them
-	{
-		std::cerr << err.msg << std::endl;
-	}
-
-	if (!importer_arrow)
-	{
-		std::cerr << "Can't load network by using the mode file: " << std::endl;
-		std::cerr << "frozen_model_arrow.pb" << std::endl;
-		exit(-1);
-	}
-
-	Ptr<dnn::Importer> importer_floor;
-	try                                     //Try to import TensorFlow AlexNet model
-	{
-		importer_floor = dnn::createTensorflowImporter("frozen_model_floor.pb");
-	}
-	catch (const cv::Exception &err)        //Importer can throw errors, we will catch them
-	{
-		std::cerr << err.msg << std::endl;
-	}
-
-	if (!importer_floor)
-	{
-		std::cerr << "Can't load network by using the mode file: " << std::endl;
-		std::cerr << "frozen_model_floor.pb" << std::endl;
-		exit(-1);
-	}
-
-
 	String inBlobName = "data_node";
 	String outBlobName = "Softmax_1";
 
 	//! [Initialize network]
 	dnn::Net net_arrow;
-	importer_arrow->populateNet(net_arrow);
-	importer_arrow.release();                     //We don't need importer anymore
+	net_arrow = readNetFromTensorflow("frozen_model_arrow.pb");
+	if (net_arrow.empty())
+	{
+		std::cerr << "Can't load network by using the mode file: " << std::endl;
+		std::cerr << "frozen_model_arrow.pb" << std::endl;
+		exit(-1);
+	}
 	for (String l : net_arrow.getLayerNames())
 	{
 		cout << l << " ";
 	}
 
-	dnn::Net net_floor;
-	importer_floor->populateNet(net_floor);
-	importer_floor.release();                     //We don't need importer anymore
+	dnn::Net net_floor = readNetFromTensorflow("frozen_model_floor.pb");
+	if(net_floor.empty())
+	{
+		std::cerr << "Can't load network by using the mode file: " << std::endl;
+		std::cerr << "frozen_model_floor.pb" << std::endl;
+		exit(-1);
+	}
 
 	//CascadeClassifier hs_cascade;
 	//CascadeClassifier upper_cascade;
@@ -453,7 +426,7 @@ int main(int argc, char** argv)
 
 					croppedArrowImage.convertTo(croppedArrowImage_f, CV_32F);
 					croppedArrowImage_f = (croppedArrowImage_f - (255 / 2.0)) / 255;
-					imshow("Video", croppedArrowImage);
+					// imshow("Video", croppedArrowImage);
 					Mat inputBlobArrow = blobFromImage(croppedArrowImage_f, 1, Size(28, 28));   //Convert Mat to image batch
 					net_arrow.setInput(inputBlobArrow, inBlobName);
 					Mat result_arrow = net_arrow.forward(outBlobName);
@@ -964,7 +937,7 @@ int main(int argc, char** argv)
 				}
 
 
-                // cvShowImage( "Video", rawImage );
+                cvShowImage( "Video", rawImage );
 #if SHOW_FOREGROUND
  				cvShowImage( "ForegroundCodeBook",ImaskCodeBook);
 #endif
