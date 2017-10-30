@@ -9,9 +9,10 @@ import numpy as np
 ext_modules = [
     Extension(
         'pycocotools._mask',
+        language='c++',
         sources=['../common/maskApi.c', 'pycocotools/_mask.pyx'],
         include_dirs = [np.get_include(), '../common'],
-        extra_compile_args=['-Wno-cpp', '-Wno-unused-function', '-std=c99'],
+        extra_compile_args=[],
     )
 ]
 

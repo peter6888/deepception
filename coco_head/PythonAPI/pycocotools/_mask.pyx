@@ -1,5 +1,5 @@
-# distutils: language = c
-# distutils: sources = ../common/maskApi.c
+# distutils: language = c++
+# distutils: sources = ../common/maskApi.cc
 
 #**************************************************************************
 # Microsoft COCO Toolbox.      version 2.0
