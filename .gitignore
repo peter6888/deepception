@@ -3,4 +3,4 @@
 workspace.xml
 checkpoint
 label_matlab/jpg/*
-
+coco_head/*
